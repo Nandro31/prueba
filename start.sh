@@ -2,23 +2,25 @@
 
 export DISPLAY=:1
 
-# Iniciar Xvfb (pantalla virtual)
+# Lanzar Xvfb (pantalla virtual)
 Xvfb :1 -screen 0 1280x720x24 &
-
-# Esperar a que se inicie bien
 sleep 2
 
-# Fondo gris para evitar pantalla negra
+# Fondo gris para confirmar que se renderiza algo
 xsetroot -solid grey &
 
-# Iniciar entorno gráfico (fluxbox)
+# Iniciar entorno gráfico mínimo (fluxbox)
 fluxbox &
 
-# Abrir ChatGPT en Chromium
+# Esperar unos segundos más
+sleep 3
+
+# Lanzar VNC conectado a Xvfb
+x11vnc -display :1 -nopw -forever -shared -bg
+sleep 2
+
+# Lanzar Chromium con ChatGPT
 chromium-browser --no-sandbox --no-first-run --disable-infobars --app=https://chat.openai.com &
 
-# Iniciar VNC
-x11vnc -display :1 -nopw -forever -shared -bg
-
-# Iniciar NoVNC escuchando en el puerto 10000
-/home/remoteuser/noVNC/utils/websockify/run 10000 localhost:5900 --web /home/remoteuser/noVNC
+# Lanzar NoVNC Websockify en puerto 10000
+exec /home/remoteuser/noVNC/utils/websockify/run 10000 localhost:5900 --web /home/remoteuser/noVNC
