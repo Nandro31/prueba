@@ -1,13 +1,12 @@
-FROM dorowu/ubuntu-desktop-lxde-vnc
+FROM consol/ubuntu-xfce-vnc
 
-# Instala Chromium y dependencias
+# Instala Chromium
+USER root
 RUN apt-get update && \
-    apt-get install -y chromium-browser chromium-driver && \
+    apt-get install -y chromium-browser && \
     apt-get clean
 
-# Establece Chromium como navegador por defecto y abre ChatGPT
-RUN mkdir -p /etc/xdg/lxsession/LXDE && \
-    echo '@chromium-browser --no-first-run --disable-features=TranslateUI --app=https://chat.openai.com' >> /etc/xdg/lxsession/LXDE/autostart
+# Abre ChatGPT automáticamente al iniciar la sesión gráfica
+RUN echo 'chromium-browser --no-first-run --kiosk https://chat.openai.com &' >> /root/.bashrc
 
-EXPOSE 80
-CMD [ "/startup.sh" ]
+EXPOSE 5901
