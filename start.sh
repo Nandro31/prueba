@@ -18,4 +18,4 @@ chromium-browser --no-first-run --app=https://chat.openai.com &
 
 # Iniciar NoVNC manualmente con websockify
 cd /home/remoteuser/noVNC
-./utils/websockify/run --web . 80 localhost:5900
+/home/remoteuser/noVNC/utils/websockify/run --web /home/remoteuser/noVNC 80 localhost:5900
