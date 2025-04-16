@@ -1,21 +1,25 @@
 #!/bin/bash
 
-# Iniciar entorno gráfico virtual
-Xvfb :1 -screen 0 1024x768x16 &
+# Lanzar servidor gráfico virtual
+Xvfb :1 -screen 0 1024x768x24 &
 export DISPLAY=:1
 
-# Iniciar XFCE
-startxfce4 &
-
-# Espera un poco para que todo se levante
+# Esperar a que Xvfb se inicie bien
 sleep 5
 
-# Iniciar VNC en background
+# Lanzar escritorio XFCE
+startxfce4 &
+sleep 5
+
+# Lanzar VNC
 x11vnc -display :1 -nopw -forever -shared -bg
 
-# Abrir ChatGPT en Chromium
-chromium-browser --no-first-run --app=https://chat.openai.com &
+# Esperar un poco más antes del navegador
+sleep 5
 
-# Iniciar NoVNC manualmente con websockify
+# Abrir ChatGPT en modo aplicación
+chromium-browser --no-sandbox --no-first-run --disable-infobars --app=https://chat.openai.com &
+
+# Lanzar NoVNC (asegúrate de que web root sea correcto)
 cd /home/remoteuser/noVNC
-/home/remoteuser/noVNC/utils/websockify/run --web /home/remoteuser/noVNC 80 localhost:5900
+./utils/websockify/run --web /home/remoteuser/noVNC 80 localhost:5900
